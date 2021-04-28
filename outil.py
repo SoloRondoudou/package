@@ -4,24 +4,6 @@ import time
 import random
 
 
-def tkinter(titre, taill, min_x, min_y, color, logo):
-    """
-    :param titre: l'element titre vous servira a donner un titre a votre page (cette element doit etre ecrit entre "" ex: "titre")
-    :param taill: l'element taill vous servira a definir une taill (cette element doit etre ecri entre "" ex: "360x360")
-    :param min_x: l'element  vous servira a definir la plus petite tail en x (cette element doit etre ecri sans "" ex: 360)
-    :param min_y: l'element  vous servira a definir la plus petite tail en y (cette element doit etre ecri sans "" ex: 360)
-    :param color: l'element  vous servira a definir la couleur de font (cette element doit etre ecri entre "" ex: black ou #FF0000)
-    :param logo: l'element  vous servira a definir  un petit logo en haut a gauche (cette element doit etre ecri entre "" ex: "logo.ico")
-    """
-    windows = Tk()
-    windows.title(titre)
-    windows.geometry(taill)
-    windows.minsize(min_x, min_y)
-    windows.config(background=color)
-    windows.iconbitmap(logo)
-    windows.mainloop()
-
-
 def code(code):
     """
     :param code: l'element code sera le code que vou aller choisir (cette element doit etre ecri entre "" ex : "200ET"
@@ -155,6 +137,12 @@ def pidiametre(perimetre):
     pi = 3.14159265358979323846264338327950288419716939937510582
     diametre = perimetre / pi
     print("le diametre est ", diametre)
+    
+def piaire(rayon):
+    pi = 3.14159265358979323846264338327950288419716939937510582
+    ryoncarre = rayon * rayon
+    result = pi * ryoncarre
+    print("l'aire de ce cercle est ", result)
 
 
 def vetement():
