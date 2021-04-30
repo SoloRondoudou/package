@@ -143,6 +143,25 @@ def piaire(rayon):
     ryoncarre = rayon * rayon
     result = pi * ryoncarre
     print("l'aire de ce cercle est ", result)
+    
+ def lettre_min():
+    min = "abcdefghijklmnopqrstuvwxyz"
+    return min
+
+
+def lettre_maj():
+    maj = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    return maj
+
+
+def caractere_special():
+    spe = r"""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""
+    return spe
+
+
+def chiffre():
+    chi = "0123456789"
+    return chi
 
 
 def vetement():
