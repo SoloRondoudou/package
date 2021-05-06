@@ -1,4 +1,3 @@
-from tkinter import *
 from statistics import *
 import time
 import random
@@ -127,6 +126,7 @@ def vitesse(km, h):
     result = km / h
     print("Vous allez a " + str(result) + "km/h")
 
+
 def piperimetre(diametre):
     pi = 3.14159265358979323846264338327950288419716939937510582
     perimetre = pi * diametre
@@ -137,14 +137,16 @@ def pidiametre(perimetre):
     pi = 3.14159265358979323846264338327950288419716939937510582
     diametre = perimetre / pi
     print("le diametre est ", diametre)
-    
+
+
 def piaire(rayon):
     pi = 3.14159265358979323846264338327950288419716939937510582
     ryoncarre = rayon * rayon
     result = pi * ryoncarre
     print("l'aire de ce cercle est ", result)
-    
- def lettre_min():
+
+
+def lettre_min():
     min = "abcdefghijklmnopqrstuvwxyz"
     return min
 
@@ -183,7 +185,6 @@ def timer_minute(x):
         print(i, ". 25 minute")
         time.sleep(15)
 
-
         print(i, ". 50 minute")
         time.sleep(15)
         print(i, ". 75 minute")
@@ -204,8 +205,8 @@ def fichier():
         fichier.close()
         print("fichier cree")
 
+    elif read_or_write == "r":
 
-    elif (read_or_write == "r"):
         with open(fichier, "r") as fichier:
             i = fichier.read()
             print("voici la lecture : ")
@@ -280,3 +281,62 @@ def Tableau():
 
         else:
             print("action non valide")
+
+
+#                                                     Les Classes
+class Neurone:
+    def __init__(self, entre=[], cache=[], sortie=0, val_sinapse_entre=[], val_sinapse_sortie=[], msg=False):
+
+        # creation des neurones
+        self.entre = entre  # les neurones d'entres
+        self.len_entre = len(entre)  # les neurones d'entres
+
+        self.len_cache = len(cache)  # les neurones caches
+        self.cache = cache  # les neurones caches
+
+        self.len_sortie = len(sortie)  # les neurones caches
+        self.sortie = sortie  # les neurones de sortie
+
+        # creation des nobres des sinapses
+        self.nbr_sinapse_entre = self.len_cache * self.len_entre  # nombre de sinapse entre les entres et les caches
+        self.nbr_sinapse_cache = self.len_cache * self.sortie  # nombre de sinapse entre les caches et la sortie
+
+        # creation des valeurs des sinapse
+        self.val_sinapse_entre = val_sinapse_entre
+        self.val_sinapse_sortie = val_sinapse_sortie
+
+        # creation du message
+        self.msg = msg
+
+        if self.msg:
+            print("Iformation sur votre Ia :")
+            print(" Les Neurones")
+            print("   Votre Ia contient", self.len_entre, "neurone d'entres")
+            print("   Votre Ia contient", self.len_cache, "neurone caches")
+            print("   Votre Ia contient", self.sortie, "neurone de sorties")
+            print()
+            print(" Les Sinapses")
+            print("   Votre Ia contient", self.nbr_sinapse_entre, "sinapses d'entres")
+            print("   Votre Ia contient", self.nbr_sinapse_cache, "sinapses de sorties")
+            print("\n")
+
+    def multiplie_entre(self):
+        for all_ninapse in range(0, self.len_cache):
+            self.cache.remove(0)
+            self.cache.append(self.entre[0] * self.val_sinapse_entre[
+                all_ninapse])  # ajouter entre 0 * par toutes les sinapse une par une
+
+        for all_sinapse in range(0, self.len_cache):
+            self.cache[all_sinapse] = self.cache[all_sinapse] + self.entre[1] * self.val_sinapse_entre[
+                all_sinapse + 3]
+
+        for all_sinapse in range(0, self.len_cache):
+            self.sortie.append(self.val_sinapse_sortie[all_sinapse] * self.cache[all_sinapse])
+
+        self.sortie.remove(0)
+
+        if self.msg:
+            print("Voici la valeur des sinapses cache", self.cache)
+
+        result = mean(self.sortie)
+        return result
