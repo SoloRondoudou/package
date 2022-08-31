@@ -340,45 +340,47 @@ class Neurone:
 
         result = mean(self.sortie)
         return result
-    
-def casino(personne, nombretentative, pourcentage, z,): 
-    listegain = []
-    i = 0
-    for y in range(0, personne):
-        mise = 2
-        compte = 64
+
+def casino(defaultmise, personne, nombretentative, pourcentage, z):
+    print()
+    meanliste = []
+    for i in range(0, z):
+        mise = defaultmise
+        listegain = []
         i = 0
-        for y in range(0, nombretentative):
-            mise = 2
+        for y in range(0, personne):
+            mise = defaultmise
             compte = 64
             i = 0
-            while i < nombretentative or compte < 65 :
-                compte = compte - mise # on mise 2 €
-                x = randint(1, 2)      # la roue tourne
+            for y in range(0, nombretentative):
+                mise = defaultmise
+                compte = 64
+                i = 0
+                while i < nombretentative or compte < 65 :
+                    compte = compte - mise # on mise 2 €
+                    x = random.randint(1, 2)      # la roue tourne
 
-                if x == 2 :
-                    mise = mise * 2    # on re-mise le double  
-                    i = i + 1
+                    if x == 2 :
+                        mise = mise * 2    # on re-mise le double  
+                        i = i + 1
 
-                elif x == 1:
-                    gain = mise * 2 # on multiplie la mise
-                    compte = compte + gain # on ajoute le gain au compte
-                    mise = 2 # on re-mise 2€
-                    i = i + 1
+                    elif x == 1:
+                        gain = mise * 2 # on multiplie la mise
+                        compte = compte + gain # on ajoute le gain au compte
+                        mise = defaultmise # on re-mise 2€
+                        i = i + 1
 
-        gaingeneral = compte - 64
-        listegain.append(gaingeneral)
+            gaingeneral = compte - 64
+            listegain.append(gaingeneral)
 
-    resultat = sum(listegain)
-    meanliste = []
+        resultat = sum(listegain)
     
-    for i in range(0, z):
         x = resultat
         meanliste.append(x)
 
     resultatgeneral = sum(meanliste) / len(meanliste)
     argentpourtoi = pourcentage * resultatgeneral / 100
     argentpourlesautre = (resultatgeneral - argentpourtoi) / personne
-    print("en moyenne sur", str(z), "test avec", str(nombretentative), "tentative sur", str(personne), "personne on obtient un gain de", str(resultatgeneral), "€")
-    print("pour vous cela fera", str(argentpourtoi),"€ et pour les", str(personne),"personne cela fera", str(argentpourlesautre),"€ pour chacune")
-    # print("\n\n\n\n\nvoici les resultat des", str(z), "test :", str(meanliste))
+    print("en moyenne sur", str(z), "tests avec", str(nombretentative), "mises sur", str(personne), "personnes on obtient un gain de", str(resultatgeneral), "€")
+    print("pour vous cela  fera", str(argentpourtoi),"€ et pour les", str(personne),"personne cela fera", str(argentpourlesautre),"€ pour chacune\n")
+    
