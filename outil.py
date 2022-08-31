@@ -381,6 +381,6 @@ def casino(defaultmise, personne, nombretentative, pourcentage, z):
     resultatgeneral = sum(meanliste) / len(meanliste)
     argentpourtoi = pourcentage * resultatgeneral / 100
     argentpourlesautre = (resultatgeneral - argentpourtoi) / personne
-    print("en moyenne sur", str(z), "tests avec", str(nombretentative), "mises sur", str(personne), "personnes on obtient un gain de", str(resultatgeneral), "€")
+    print("en moyenne sur", str(z), "tests avec", str(nombretentative), "mises pour", str(personne), "personnes on obtient un gain de", str(resultatgeneral), "€")
     print("pour vous cela  fera", str(argentpourtoi),"€ et pour les", str(personne),"personne cela fera", str(argentpourlesautre),"€ pour chacune\n")
     
