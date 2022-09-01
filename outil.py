@@ -1,6 +1,8 @@
 from statistics import *
 import time
 import random
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def code(code):
@@ -383,4 +385,6 @@ def casino(defaultmise, personne, nombretentative, pourcentage, z):
     argentpourlesautre = (resultatgeneral - argentpourtoi) / personne
     print("en moyenne sur", str(z), "tests avec", str(nombretentative), "mises pour", str(personne), "personnes on obtient un gain de", str(resultatgeneral), "€")
     print("pour vous cela  fera", str(argentpourtoi),"€ et pour les", str(personne),"personne cela fera", str(argentpourlesautre),"€ pour chacune\n")
-    
+
+    ax.plot(meanliste)
+    plt.show() # affiche la figure à l'écran
