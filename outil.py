@@ -3,7 +3,7 @@ import time
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-
+fig, ax = plt.subplots()
 
 def code(code):
     """
@@ -388,3 +388,5 @@ def casino(defaultmise, personne, nombretentative, pourcentage, z):
 
     ax.plot(meanliste)
     plt.show() # affiche la figure à l'écran
+
+casino(20, 1, 100, 30, 100)
