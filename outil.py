@@ -3,6 +3,7 @@ import time
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 fig, ax = plt.subplots()
 
 def code(code):
@@ -346,7 +347,8 @@ class Neurone:
 def casino(defaultmise, personne, nombretentative, pourcentage, z):
     print()
     meanliste = []
-    for i in range(0, z):
+    
+    for i in tqdm(range(0, z), desc ="Text You Want"):
         mise = defaultmise
         listegain = []
         i = 0
@@ -383,7 +385,7 @@ def casino(defaultmise, personne, nombretentative, pourcentage, z):
     resultatgeneral = sum(meanliste) / len(meanliste)
     argentpourtoi = pourcentage * resultatgeneral / 100
     argentpourlesautre = (resultatgeneral - argentpourtoi) / personne
-    print("en moyenne sur", str(z), "tests avec", str(nombretentative), "mises pour", str(personne), "personnes on obtient un gain de", str(resultatgeneral), "€")
+    print("\nen moyenne sur", str(z), "tests avec", str(nombretentative), "mises pour", str(personne), "personnes on obtient un gain de", str(resultatgeneral), "€")
     print("pour vous cela  fera", str(argentpourtoi),"€ et pour les", str(personne),"personne cela fera", str(argentpourlesautre),"€ pour chacune\n")
 
     ax.plot(meanliste)
