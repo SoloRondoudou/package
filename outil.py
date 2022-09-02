@@ -344,23 +344,23 @@ class Neurone:
         result = mean(self.sortie)
         return result
 
-def casino(defaultmise, personne, nombretentative, pourcentage, z):
+def casino(defaultcompte, personne, nombretentative, pourcentage, z):
     print()
     meanliste = []
-    
-    for i in tqdm(range(0, z), desc ="Text You Want"):
+    defaultmise = defaultcompte / nombretentative
+    for i in tqdm(range(0, z), desc ="Chargement"):
         mise = defaultmise
         listegain = []
         i = 0
         for y in range(0, personne):
-            mise = defaultmise
-            compte = 64
+            mise = defaultmise / personne
+            compte = defaultcompte
             i = 0
             for y in range(0, nombretentative):
-                mise = defaultmise
-                compte = 64
+                mise = defaultmise / personne
+                compte = defaultcompte
                 i = 0
-                while i < nombretentative or compte < 65 :
+                while i < nombretentative or compte < (defaultcompte + 1) :
                     compte = compte - mise # on mise 2 €
                     x = random.randint(1, 2)      # la roue tourne
 
@@ -374,7 +374,7 @@ def casino(defaultmise, personne, nombretentative, pourcentage, z):
                         mise = defaultmise # on re-mise 2€
                         i = i + 1
 
-            gaingeneral = compte - 64
+            gaingeneral = compte - defaultcompte
             listegain.append(gaingeneral)
 
         resultat = sum(listegain)
