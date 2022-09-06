@@ -4,7 +4,6 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-fig, ax = plt.subplots()
 
 def code(code):
     """
@@ -286,78 +285,105 @@ def Tableau():
             print("action non valide")
 
 
-#                                                     Les Classes
-class Neurone:
-    def __init__(self, entre=[], cache=[], sortie=0, val_sinapse_entre=[], val_sinapse_sortie=[], msg=False):
+def ia(valeur_entrer, donne_sortie, inputSize, hiddenSize, outputSize, train):
+    x_entrer = np.array(valeur_entrer, dtype=float) # données d'entrer
+    y = np.array(donne_sortie, dtype=float) # données de sortie /  1 = rouge /  0 = bleu
 
-        # creation des neurones
-        self.entre = entre  # les neurones d'entres
-        self.len_entre = len(entre)  # les neurones d'entres
+    # Changement de l'échelle de nos valeurs pour être entre 0 et 1
+    x_entrer = x_entrer / np.amax(x_entrer, axis=0) # On divise chaque entré par la valeur max des entrées
 
-        self.len_cache = len(cache)  # les neurones caches
-        self.cache = cache  # les neurones caches
+    # On récupère ce qu'il nous intéresse
+    X = np.split(x_entrer, [len(x_entrer) - 1])[0] # Données sur lesquelles on va s'entrainer, les 8 premières de notre matrice
+    xPrediction = np.split(x_entrer, [len(x_entrer) - 1])[1] # Valeur que l'on veut trouver
 
-        self.len_sortie = len(sortie)  # les neurones caches
-        self.sortie = sortie  # les neurones de sortie
+    #Notre classe de réseau neuronal
+    class Neural_Network(object):
+        def __init__(self):
+                
+        #Nos paramètres
+            self.inputSize = inputSize # Nombre de neurones d'entrer
+            self.outputSize = outputSize# Nombre de neurones de sortie
+            self.hiddenSize = hiddenSize # Nombre de neurones cachés
 
-        # creation des nobres des sinapses
-        self.nbr_sinapse_entre = self.len_cache * self.len_entre  # nombre de sinapse entre les entres et les caches
-        self.nbr_sinapse_cache = self.len_cache * self.sortie  # nombre de sinapse entre les caches et la sortie
+        #Nos poids
+            self.W1 = np.random.randn(self.inputSize, self.hiddenSize) # (2x3) Matrice de poids entre les neurones d'entrer et cachés
+            self.W2 = np.random.randn(self.hiddenSize, self.outputSize) # (3x1) Matrice de poids entre les neurones cachés et sortie
 
-        # creation des valeurs des sinapse
-        self.val_sinapse_entre = val_sinapse_entre
-        self.val_sinapse_sortie = val_sinapse_sortie
 
-        # creation du message
-        self.msg = msg
+        #Fonction de propagation avant
+        def forward(self, X):
 
-        if self.msg:
-            print("Iformation sur votre Ia :")
-            print(" Les Neurones")
-            print("   Votre Ia contient", self.len_entre, "neurone d'entres")
-            print("   Votre Ia contient", self.len_cache, "neurone caches")
-            print("   Votre Ia contient", self.sortie, "neurone de sorties")
-            print()
-            print(" Les Sinapses")
-            print("   Votre Ia contient", self.nbr_sinapse_entre, "sinapses d'entres")
-            print("   Votre Ia contient", self.nbr_sinapse_cache, "sinapses de sorties")
-            print("\n")
+            self.z = np.dot(X, self.W1) # Multiplication matricielle entre les valeurs d'entrer et les poids W1
+            self.z2 = self.sigmoid(self.z) # Application de la fonction d'activation (Sigmoid)
+            self.z3 = np.dot(self.z2, self.W2) # Multiplication matricielle entre les valeurs cachés et les poids W2
+            o = self.sigmoid(self.z3) # Application de la fonction d'activation, et obtention de notre valeur de sortie final
+            return o
 
-    def multiplie_entre(self):
-        for all_ninapse in range(0, self.len_cache):
-            self.cache.remove(0)
-            self.cache.append(self.entre[0] * self.val_sinapse_entre[
-                all_ninapse])  # ajouter entre 0 * par toutes les sinapse une par une
+        # Fonction d'activation
+        def sigmoid(self, s):
+            return 1/(1+np.exp(-s))
 
-        for all_sinapse in range(0, self.len_cache):
-            self.cache[all_sinapse] = self.cache[all_sinapse] + self.entre[1] * self.val_sinapse_entre[
-                all_sinapse + 3]
+        # Dérivée de la fonction d'activation
+        def sigmoidPrime(self, s):
+            return s * (1 - s)
 
-        for all_sinapse in range(0, self.len_cache):
-            self.sortie.append(self.val_sinapse_sortie[all_sinapse] * self.cache[all_sinapse])
+        #Fonction de rétropropagation
+        def backward(self, X, y, o):
 
-        self.sortie.remove(0)
+            self.o_error = y - o # Calcul de l'erreur
+            self.o_delta = self.o_error*self.sigmoidPrime(o) # Application de la dérivée de la sigmoid à cette erreur
 
-        if self.msg:
-            print("Voici la valeur des sinapses cache", self.cache)
+            self.z2_error = self.o_delta.dot(self.W2.T) # Calcul de l'erreur de nos neurones cachés 
+            self.z2_delta = self.z2_error*self.sigmoidPrime(self.z2) # Application de la dérivée de la sigmoid à cette erreur
 
-        result = mean(self.sortie)
-        return result
+            self.W1 += X.T.dot(self.z2_delta) # On ajuste nos poids W1
+            self.W2 += self.z2.T.dot(self.o_delta) # On ajuste nos poids W2
+
+        #Fonction d'entrainement 
+        def train(self, X, y):
+                
+            o = self.forward(X)
+            self.backward(X, y, o)
+
+        #Fonction de prédiction
+        def predict(self):
+                
+            #print("Donnée prédite apres entrainement: ")
+            #print("Entrée : \n" + str(xPrediction))
+            #print("Sortie : \n" + str(self.forward(xPrediction)))
+
+            if(self.forward(xPrediction) < 0.5):
+                return 0
+            else:
+                return 1
+
+
+    NN = Neural_Network()
+
+    for i in range(0, train): #Choisissez un nombre d'itération, attention un trop grand nombre peut créer un overfitting !
+        #print("# " + str(i) + "\n")
+        #print("Valeurs d'entrées: \n" + str(X))
+        #print("Sortie actuelle: \n" + str(y))
+        #print("Sortie prédite: \n" + str(np.matrix.round(NN.forward(X),2)))
+        #print("\n")
+        NN.train(X,y)
+
+    return NN.predict()
 
 def casino(defaultcompte, personne, nombretentative, pourcentage, z):
     print()
     meanliste = []
-    defaultmise = defaultcompte / nombretentative
+    defaultmise = defaultcompte / (nombretentative * personne)
     for i in tqdm(range(0, z), desc ="Chargement"):
         mise = defaultmise
         listegain = []
         i = 0
         for y in range(0, personne):
-            mise = defaultmise / personne
+            mise = defaultmise
             compte = defaultcompte
             i = 0
             for y in range(0, nombretentative):
-                mise = defaultmise / personne
+                mise = defaultmise
                 compte = defaultcompte
                 i = 0
                 while i < nombretentative or compte < (defaultcompte + 1) :
@@ -373,7 +399,6 @@ def casino(defaultcompte, personne, nombretentative, pourcentage, z):
                         compte = compte + gain # on ajoute le gain au compte
                         mise = defaultmise # on re-mise 2€
                         i = i + 1
-
             gaingeneral = compte - defaultcompte
             listegain.append(gaingeneral)
 
@@ -385,8 +410,16 @@ def casino(defaultcompte, personne, nombretentative, pourcentage, z):
     resultatgeneral = sum(meanliste) / len(meanliste)
     argentpourtoi = pourcentage * resultatgeneral / 100
     argentpourlesautre = (resultatgeneral - argentpourtoi) / personne
+    pourcentagecompte = 100 * resultatgeneral / defaultcompte
+    foisx = 1 + (pourcentagecompte / 100)
+    listeresultat = []
+    for i in range(0, z):
+        listeresultat.append(resultatgeneral)
     print("\nen moyenne sur", str(z), "tests avec", str(nombretentative), "mises pour", str(personne), "personnes on obtient un gain de", str(resultatgeneral), "€")
-    print("pour vous cela  fera", str(argentpourtoi),"€ et pour les", str(personne),"personne cela fera", str(argentpourlesautre),"€ pour chacune\n")
-
-    ax.plot(meanliste)
+    print("pour vous cela  fera", str(argentpourtoi),"€ et pour les", str(personne),"personne cela fera", str(argentpourlesautre),"€ pour chacune")
+    print("ce qui fait donc", str(pourcentagecompte) + "%", "de de comte de départ sois un ×" + str(foisx),)
+    print("Dans le meilleur des cas on a un bénéfice de", str(max(meanliste)), "€ et dans le pire un bénéfice de", str(min(meanliste)), "€\n")
+    plt.grid(True)
+    plt.plot(meanliste, linewidth=2)
+    plt.plot(listeresultat, linewidth=4)
     plt.show() # affiche la figure à l'écran
